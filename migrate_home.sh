@@ -23,5 +23,8 @@ fi
 # symlink .ssh info from default home to home on /raid
 ln --symbolic $(readlink -f "${DEFAULT_HOME}/.ssh") $(readlink -f "${RAID_HOME}")/.ssh
 
+# Set RAID_HOME as new HOME in .bash_profile
+sed -i '/^# .bash_profile*/a export HOME="/raid/projects/${USER}"' "${RAID_HOME}/.bash_profile"
+
 unset DEFAULT_HOME
 unset RAID_HOME
