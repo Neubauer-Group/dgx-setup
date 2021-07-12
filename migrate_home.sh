@@ -28,6 +28,8 @@ ln --symbolic $(readlink -f "${DEFAULT_HOME}/.ssh") $(readlink -f "${RAID_HOME}"
 # Set RAID_HOME as new HOME in .bash_profile
 sed -i '/^# .bash_profile*/a export HOME="/raid/projects/${USER}"' "${RAID_HOME}/.bash_profile"
 
+printf '\n# User specific aliases and functions\nif [ -f ~/.bash_aliases ]; then\n    . ~/.bash_aliases\nfi\n' >> "${RAID_HOME}/.bashrc"
+echo '' >> "${RAID_HOME}/.bashrc"
 printf "\n# Instead of directly editing the system's default .bashrc load a user version\nif [ -f ~/.bashrc_user ]; then\n    . ~/.bashrc_user\nfi\n" >> "${RAID_HOME}/.bashrc"
 
 unset DEFAULT_HOME
