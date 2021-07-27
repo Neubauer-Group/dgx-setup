@@ -24,6 +24,15 @@ ln --symbolic --force $(readlink -f "${RAID_HOME}/.bash_aliases") $(readlink -f 
 touch "${RAID_HOME}/.bashrc_user"
 ln --symbolic --force $(readlink -f "${RAID_HOME}/.bashrc_user") $(readlink -f "${DEFAULT_HOME}/.bashrc_user")
 
+# Ensure minimal required .bashrc_user
+if [ ! "$(sed -n '/^#!/p;q' ${RAID_HOME}/.bashrc_user)" ]; then
+    # If no shebang assume zero-sized (empty) file
+    echo '#!/usr/bin/env bash' > "${RAID_HOME}/.bashrc_user"
+	# Ensure the shebang '#!/usr/bin/env bash'
+	elif [ ! "$(sed -n '/^#!\/usr\/bin\/env bash/p;q' ${RAID_HOME}/.bashrc_user)" ]; then
+	    sed -i "1s/.*/#!\/usr\/bin\/env bash/" "${RAID_HOME}/.bashrc_user"
+fi
+
 # Also get .Xauthority
 cp "${DEFAULT_HOME}/.Xauthority" .
 ln --symbolic --force $(readlink -f "${RAID_HOME}/.Xauthority") $(readlink -f "${DEFAULT_HOME}/.Xauthority")
