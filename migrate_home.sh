@@ -37,6 +37,10 @@ fi
 if ! grep -q 'export HOME="/raid/projects/${USER}"' "${RAID_HOME}/.bashrc_user"; then
    printf '\nexport HOME="/raid/projects/${USER}"\n' >> "${RAID_HOME}/.bashrc_user"
 fi
+# * Inject `cd $HOME` after the sourcing of .bashrc (and so .bashrc_user)
+sed -i "$(($(grep -n 'f ~/.bashrc ];' ${RAID_HOME}/.bash_profile | cut -f1 -d:) + 4))"' i # .bashrc_user sets $HOME to another location than default' "${RAID_HOME}/.bash_profile"
+sed -i "$(($(grep -n 'f ~/.bashrc ];' ${RAID_HOME}/.bash_profile | cut -f1 -d:) + 5))"' i cd "${HOME}"\n' "${RAID_HOME}/.bash_profile"
+
 
 # Also get .Xauthority
 cp "${DEFAULT_HOME}/.Xauthority" .
