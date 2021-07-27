@@ -8,7 +8,7 @@
 $ bash migrate_home.sh
 ```
 
-2. In your `/raid/projects/$USER/.bash_profile` add the following comment anywhere **above** sourcing of `~/.bashrc` to set the start location for adding `pyenv` information to your `.bash_profile`
+2. In your `/raid/projects/$USER/.bash_profile` make sure that the following comment exists anywhere **above** the sourcing of `~/.bashrc` to set the start location for adding `pyenv` information to your `.bash_profile`
 
 ```bash
 # pyenv setup
