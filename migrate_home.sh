@@ -3,6 +3,11 @@
 export DEFAULT_HOME="/home/${USER}"
 export RAID_HOME="/raid/projects/${USER}"
 
+# Make restore files of system defaults
+cp "${DEFAULT_HOME}/.bash_profile" "${DEFAULT_HOME}/.bash_profile.bak"
+cp "${DEFAULT_HOME}/.bashrc" "${DEFAULT_HOME}/.bashrc.bak"
+cp "${DEFAULT_HOME}/.bash_logout" "${DEFAULT_HOME}/.bash_logout.bak"
+
 mkdir -p "${RAID_HOME}"
 cd "${RAID_HOME}"
 
@@ -19,6 +24,24 @@ ln --symbolic --force $(readlink -f "${RAID_HOME}/.bash_aliases") $(readlink -f 
 touch "${RAID_HOME}/.bashrc_user"
 ln --symbolic --force $(readlink -f "${RAID_HOME}/.bashrc_user") $(readlink -f "${DEFAULT_HOME}/.bashrc_user")
 
+# Ensure minimal required .bashrc_user
+# * Ensure desired shebang
+if [ ! "$(sed -n '/^#!/p;q' ${RAID_HOME}/.bashrc_user)" ]; then
+    # If no shebang assume zero-sized (empty) file
+    echo '#!/usr/bin/env bash' > "${RAID_HOME}/.bashrc_user"
+	# Ensure the shebang '#!/usr/bin/env bash'
+	elif [ ! "$(sed -n '/^#!\/usr\/bin\/env bash/p;q' ${RAID_HOME}/.bashrc_user)" ]; then
+	    sed -i "1s/.*/#!\/usr\/bin\/env bash/" "${RAID_HOME}/.bashrc_user"
+fi
+# * Ensure exporting of HOME
+if ! grep -q 'export HOME="/raid/projects/${USER}"' "${RAID_HOME}/.bashrc_user"; then
+   printf '\nexport HOME="/raid/projects/${USER}"\n' >> "${RAID_HOME}/.bashrc_user"
+fi
+# * Inject `cd $HOME` after the sourcing of .bashrc (and so .bashrc_user)
+sed -i "$(($(grep -n 'f ~/.bashrc ];' ${RAID_HOME}/.bash_profile | cut -f1 -d:) + 4))"' i # .bashrc_user sets $HOME to another location than default' "${RAID_HOME}/.bash_profile"
+sed -i "$(($(grep -n 'f ~/.bashrc ];' ${RAID_HOME}/.bash_profile | cut -f1 -d:) + 5))"' i cd "${HOME}"\n' "${RAID_HOME}/.bash_profile"
+
+
 # Also get .Xauthority
 cp "${DEFAULT_HOME}/.Xauthority" .
 ln --symbolic --force $(readlink -f "${RAID_HOME}/.Xauthority") $(readlink -f "${DEFAULT_HOME}/.Xauthority")
@@ -32,6 +55,9 @@ sed -i '/^# .bash_profile*/a export HOME="/raid/projects/${USER}"' "${RAID_HOME}
 # Source .bash_aliases and .bashrc_user from .bashrc
 printf '\n# User specific aliases and functions\nif [ -f ~/.bash_aliases ]; then\n    . ~/.bash_aliases\nfi\n' >> "${RAID_HOME}/.bashrc"
 printf "\n# Instead of directly editing the system's default .bashrc load a user version\nif [ -f ~/.bashrc_user ]; then\n    . ~/.bashrc_user\nfi\n" >> "${RAID_HOME}/.bashrc"
+
+# Inject `# pyenv setup` before sourcing .bashrc (and so .bashrc_user) for use in pyenv_setup.sh
+sed -i "$(($(grep -n 'f ~/.bashrc ];' ${RAID_HOME}/.bash_profile | cut -f1 -d:) - 1))"' i # pyenv setup\n' "${RAID_HOME}/.bash_profile"
 
 unset DEFAULT_HOME
 unset RAID_HOME
