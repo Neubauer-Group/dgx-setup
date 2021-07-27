@@ -25,12 +25,17 @@ touch "${RAID_HOME}/.bashrc_user"
 ln --symbolic --force $(readlink -f "${RAID_HOME}/.bashrc_user") $(readlink -f "${DEFAULT_HOME}/.bashrc_user")
 
 # Ensure minimal required .bashrc_user
+# * Ensure desired shebang
 if [ ! "$(sed -n '/^#!/p;q' ${RAID_HOME}/.bashrc_user)" ]; then
     # If no shebang assume zero-sized (empty) file
     echo '#!/usr/bin/env bash' > "${RAID_HOME}/.bashrc_user"
 	# Ensure the shebang '#!/usr/bin/env bash'
 	elif [ ! "$(sed -n '/^#!\/usr\/bin\/env bash/p;q' ${RAID_HOME}/.bashrc_user)" ]; then
 	    sed -i "1s/.*/#!\/usr\/bin\/env bash/" "${RAID_HOME}/.bashrc_user"
+fi
+# * Ensure exporting of HOME
+if ! grep -q 'export HOME="/raid/projects/${USER}"' "${RAID_HOME}/.bashrc_user"; then
+   printf '\nexport HOME="/raid/projects/${USER}"\n' >> "${RAID_HOME}/.bashrc_user"
 fi
 
 # Also get .Xauthority
