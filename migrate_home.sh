@@ -3,6 +3,11 @@
 export DEFAULT_HOME="/home/${USER}"
 export RAID_HOME="/raid/projects/${USER}"
 
+# Make restore files of system defaults
+cp "${DEFAULT_HOME}/.bash_profile" "${DEFAULT_HOME}/.bash_profile.bak"
+cp "${DEFAULT_HOME}/.bashrc" "${DEFAULT_HOME}/.bashrc.bak"
+cp "${DEFAULT_HOME}/.bash_logout" "${DEFAULT_HOME}/.bash_logout.bak"
+
 mkdir -p "${RAID_HOME}"
 cd "${RAID_HOME}"
 
