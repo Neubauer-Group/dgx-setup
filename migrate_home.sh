@@ -56,5 +56,8 @@ sed -i '/^# .bash_profile*/a export HOME="/raid/projects/${USER}"' "${RAID_HOME}
 printf '\n# User specific aliases and functions\nif [ -f ~/.bash_aliases ]; then\n    . ~/.bash_aliases\nfi\n' >> "${RAID_HOME}/.bashrc"
 printf "\n# Instead of directly editing the system's default .bashrc load a user version\nif [ -f ~/.bashrc_user ]; then\n    . ~/.bashrc_user\nfi\n" >> "${RAID_HOME}/.bashrc"
 
+# Inject `# pyenv setup` before sourcing .bashrc (and so .bashrc_user) for use in pyenv_setup.sh
+sed -i "$(($(grep -n 'f ~/.bashrc ];' ${RAID_HOME}/.bash_profile | cut -f1 -d:) - 1))"' i # pyenv setup\n' "${RAID_HOME}/.bash_profile"
+
 unset DEFAULT_HOME
 unset RAID_HOME
