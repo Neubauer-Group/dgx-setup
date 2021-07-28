@@ -26,3 +26,34 @@ $ bash pyenv_setup.sh
 $ . ~/.bash_profile
 $ bash build_python.sh
 ```
+
+## Test
+
+As a simple test that everything is working okay:
+
+* Create a `pyenv` virtual environment
+
+```console
+$ pyenv virtualenv 3.8.11 base
+```
+
+* Activate the `base` virtual environment
+
+```console
+$ pyenv activate base
+```
+
+* Install some dependencies with `pip`
+
+```console
+(base) $ python -m pip install --upgrade pip setuptools wheel
+(base) $ python -m pip install matplotlib
+```
+
+* Run a test example Python script
+
+```console
+(base) $ python test/example.py
+```
+
+which should produce a plot named `mpl_example.png` in your current working directory.
