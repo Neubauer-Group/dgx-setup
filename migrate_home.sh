@@ -42,8 +42,7 @@ sed -i "$(($(grep -n 'f ~/.bashrc ];' ${RAID_HOME}/.bash_profile | cut -f1 -d:) 
 sed -i "$(($(grep -n 'f ~/.bashrc ];' ${RAID_HOME}/.bash_profile | cut -f1 -d:) + 5))"' i cd "${HOME}"\n' "${RAID_HOME}/.bash_profile"
 
 
-# Also get .Xauthority
-cp "${DEFAULT_HOME}/.Xauthority" .
+# symlink .Xauthority from default home to home on /raid
 ln --symbolic --force $(readlink -f "${DEFAULT_HOME}/.Xauthority") $(readlink -f "${RAID_HOME}/.Xauthority")
 
 # symlink .ssh info from default home to home on /raid
