@@ -59,17 +59,39 @@ $ pyenv activate base
 which should produce a plot named `mpl_example.png` in your current working directory.
 
 ## Optional Conda Install for MLFlow
-MLFlow works best with conda. To install it:
 
-* Download a copy of the miniconda install script
+MLFlow [works best with Conda for managing environments](https://www.mlflow.org/docs/latest/projects.html#mlproject-file).
+`pyenv` has the ability to install Conda distributions as well, so you can `pyenv install` whatever distribution you'd like (c.f. output of `pyenv install --list | grep conda`)
+
 ```console
-$ wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh
+$ pyenv install miniconda3-latest
 ```
 
-* Execute the install script
+You can treat the miniconda version that you've selected as you would any other `pyenv` version when creating a `pyenv` virtual environment.
+
 ```console
-$ bash Miniconda3-py38_4.10.3-Linux-x86_64.sh
+$ pyenv virtualenv miniconda3-latest mlflow-base
 ```
 
-* Accept the license terms
-* Accept the defaults and allow it to run `conda init`
+### Making Conda useable standalone
+
+If you want to be able to use Conda for package management directly outside of `pyenv`, you just need to use the installed miniconda distribution to initialize Conda
+
+```console
+$ pyenv shell miniconda3-latest
+$ conda init
+$ conda config --set auto_activate_base false
+```
+
+and after a shell restart your Conda `pyenv` environments can now be activated with either `pyenv activate` or `conda activate`.
+
+
+Note that it is important to make sure the `auto_activate_base false` command is run &mdash; which results in the following being added to your `.condarc`
+
+```console
+$ grep auto_activate ~/.condarc
+auto_activate_base: false
+```
+
+&mdash; to ensure that there won't be conflict between Conda environment Python runtimes and any other virtual environment that you have.
+As `conda init` will still place `condabin` onto `PATH` you will not need to update [MLFlow's `MLFLOW_CONDA_HOME` shell variable](https://www.mlflow.org/docs/latest/projects.html#project-environments).
