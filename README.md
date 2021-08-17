@@ -61,13 +61,21 @@ which should produce a plot named `mpl_example.png` in your current working dire
 ## Optional Conda Install for MLFlow
 
 MLFlow [works best with Conda for managing environments](https://www.mlflow.org/docs/latest/projects.html#mlproject-file).
-`pyenv` has the ability to install Conda distributions as well, so you can just `pyenv install` whatever distribution you'd like (c.f. output of `pyenv install --list | grep conda`)
+`pyenv` has the ability to install Conda distributions as well, so you can `pyenv install` whatever distribution you'd like (c.f. output of `pyenv install --list | grep conda`)
 
 ```console
 $ pyenv install miniconda3-latest
 ```
 
-You can now
+You can treat the miniconda version that you've selected as you would any other `pyenv` version when creating a `pyenv` virtual environment.
+
+```console
+$ pyenv virtualenv miniconda3-latest mlflow-base
+```
+
+### Making Conda useable standalone
+
+If you want to be able to use Conda for package management directly outside of `pyenv`, you just need to use the install miniconda distribution to initialize Conda
 
 ```console
 $ pyenv shell miniconda3-latest
@@ -75,13 +83,7 @@ $ conda init
 $ conda config --set auto_activate_base false
 ```
 
-and after a shell restart you can treat the miniconda version that you've selected as you would any other `pyenv` version when creating a `pyenv` virtual environment.
-
-```console
-$ pyenv virtualenv miniconda3-latest mlflow-base
-```
-
-This environment can now be activated with either `pyenv activate` or `conda activate`.
+and after a shell restart your Conda `pyenv` environments can now be activated with either `pyenv activate` or `conda activate`.
 
 
 Note that it is important to make sure the `auto_activate_base false` command is run &mdash; which results in the following being added to your `.condarc`
@@ -92,3 +94,4 @@ auto_activate_base: false
 ```
 
 &mdash; to ensure that there won't be conflict between Conda environment Python runtimes and any other virtual environment that you have.
+As `conda init` will still place `condabin` onto `PATH` you will not need to update [MLFlow's `MLFLOW_CONDA_HOME` shell variable](https://www.mlflow.org/docs/latest/projects.html#project-environments).
