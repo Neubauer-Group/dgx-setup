@@ -64,8 +64,31 @@ MLFlow [works best with Conda for managing environments](https://www.mlflow.org/
 `pyenv` has the ability to install Conda distributions as well, so you can just `pyenv install` whatever distribution you'd like (c.f. output of `pyenv install --list | grep conda`)
 
 ```console
-# Example
 $ pyenv install miniconda3-latest
 ```
 
-You can now just treat the miniconda version that you've selected as you would any other `pyenv` version when creating a `pyenv` virtual environment.
+You can now
+
+```console
+$ pyenv shell miniconda3-latest
+$ conda init
+$ conda config --set auto_activate_base false
+```
+
+and after a shell restart you can treat the miniconda version that you've selected as you would any other `pyenv` version when creating a `pyenv` virtual environment.
+
+```console
+$ pyenv virtualenv miniconda3-latest mlflow-base
+```
+
+This environment can now be activated with either `pyenv activate` or `conda activate`.
+
+
+Note that it is important to make sure the `auto_activate_base false` command is run &mdash; which results in the following being added to your `.condarc`
+
+```console
+$ grep auto_activate ~/.condarc
+auto_activate_base: false
+```
+
+&mdash; to ensure that there won't be conflict between Conda environment Python runtimes and any other virtual environment that you have.
