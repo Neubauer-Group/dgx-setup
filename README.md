@@ -83,7 +83,7 @@ You can treat the miniconda version that you've selected as you would any other 
 $ pyenv virtualenv miniconda3-latest mlflow-base
 ```
 
-These Conda `pyenv` environments can be activated with either `pyenv activate` or `conda activate`.
+These Conda `pyenv` environments can be activated with either `pyenv activate` or `conda activate`, though it is recommended to **only** use `pyenv activate` as switching between `pyenv` environments with a `conda` environment activated will not update the Python runtime used.
 
 Note that it is important to make sure the `auto_activate_base false` command is run &mdash; which results in the following being added to your `.condarc`
 
