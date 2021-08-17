@@ -59,17 +59,13 @@ $ pyenv activate base
 which should produce a plot named `mpl_example.png` in your current working directory.
 
 ## Optional Conda Install for MLFlow
-MLFlow works best with conda. To install it:
 
-* Download a copy of the miniconda install script
+MLFlow [works best with Conda for managing environments](https://www.mlflow.org/docs/latest/projects.html#mlproject-file).
+`pyenv` has the ability to install Conda distributions as well, so you can just `pyenv install` whatever distribution you'd like (c.f. output of `pyenv install --list | grep conda`)
+
 ```console
-$ wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh
+# Example
+$ pyenv install miniconda3-latest
 ```
 
-* Execute the install script
-```console
-$ bash Miniconda3-py38_4.10.3-Linux-x86_64.sh
-```
-
-* Accept the license terms
-* Accept the defaults and allow it to run `conda init`
+You can now just treat the miniconda version that you've selected as you would any other `pyenv` version when creating a `pyenv` virtual environment.
