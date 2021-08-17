@@ -73,9 +73,7 @@ You can treat the miniconda version that you've selected as you would any other 
 $ pyenv virtualenv miniconda3-latest mlflow-base
 ```
 
-### Making Conda useable standalone
-
-If you want to be able to use Conda for package management directly outside of `pyenv`, you just need to use the installed miniconda distribution to initialize Conda
+To be able to use Conda for package management with or without `pyenv`, you just need to use the installed miniconda distribution to initialize Conda
 
 ```console
 $ pyenv shell miniconda3-latest
