@@ -8,6 +8,8 @@
 $ bash migrate_home.sh
 ```
 
+**Note:** you need to update your environment by either sourcing things or logging out and logging in again before moving onto Step 2.
+
 2. In your `/raid/projects/$USER/.bash_profile` make sure that the following comment exists anywhere **above** the sourcing of `~/.bashrc` to set the start location for adding `pyenv` information to your `.bash_profile`
 
 ```bash
